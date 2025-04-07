@@ -42,12 +42,6 @@ pid_dji\r1_dribble.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.
 pid_dji\r1_dribble.o: ../Inc/fdcan.h
 pid_dji\r1_dribble.o: ../Inc/tim.h
 pid_dji\r1_dribble.o: ../Inc/gpio.h
-pid_dji\r1_dribble.o: ..\USER\motorctrl.h
-pid_dji\r1_dribble.o: ..\USER\PID_MODEL.h
-pid_dji\r1_dribble.o: ..\USER\rtwtypes.h
-pid_dji\r1_dribble.o: ..\USER\bsp_fdcan.h
-pid_dji\r1_dribble.o: ..\USER\motorctrl.h
-pid_dji\r1_dribble.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
 pid_dji\r1_dribble.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 pid_dji\r1_dribble.o: ../Inc/FreeRTOSConfig.h
 pid_dji\r1_dribble.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
@@ -59,3 +53,9 @@ pid_dji\r1_dribble.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
 pid_dji\r1_dribble.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 pid_dji\r1_dribble.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h
 pid_dji\r1_dribble.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
+pid_dji\r1_dribble.o: ..\USER\motorctrl.h
+pid_dji\r1_dribble.o: ..\USER\PID_MODEL.h
+pid_dji\r1_dribble.o: ..\USER\rtwtypes.h
+pid_dji\r1_dribble.o: ..\USER\bsp_fdcan.h
+pid_dji\r1_dribble.o: ..\USER\motorctrl.h
+pid_dji\r1_dribble.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h

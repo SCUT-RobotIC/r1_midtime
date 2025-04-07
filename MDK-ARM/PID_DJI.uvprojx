@@ -1002,11 +1002,6 @@
               <FilePath>..\USER\dm_motor_ctrl.c</FilePath>
             </File>
             <File>
-              <FileName>dm_motor_drv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USER\dm_motor_drv.c</FilePath>
-            </File>
-            <File>
               <FileName>motorctrl.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\motorctrl.c</FilePath>
@@ -1027,9 +1022,19 @@
               <FilePath>..\USER\UPPER_LOCATION.c</FilePath>
             </File>
             <File>
+              <FileName>dm_motor_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\dm_motor_drv.c</FilePath>
+            </File>
+            <File>
               <FileName>sbus.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\sbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>r1_shoot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\r1_shoot.c</FilePath>
             </File>
             <File>
               <FileName>R1_dribble.c</FileName>

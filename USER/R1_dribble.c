@@ -5,11 +5,14 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "gpio.h"
+
 extern motor_measure_t *motor_data_can1[8];
 extern motor_measure_t *motor_data_can2[8];
 extern motor_measure_t *motor_data_can3[8];
-void dribbling_init(void){//PID参数
-
+uint8_t DribblingStatus=0;
+void Stop(void){
+		rtU.status_CH3_7=2;
+		set_target(3,7,8191*CIRCLES_UP);
 }
 void going_up(void){
 
@@ -19,22 +22,44 @@ void going_up(void){
         set_target(3,7,2000);
 		};
 	
-		rtU.status_CH3_7=2;
-		set_target(3,7,8191*CIRCLES_UP);
         
 }
-void dribbling(void){
+
+void dribbling(int delay_time_stike,int delay_time_close_claw){
 				rtU.status_CH3_7=2;
         set_target(3,5,-8191*CIRCLES_OPEN); //开爪，圈数待测
-        set_target(3,7,10*8191); //降，圈数待测
+        set_target(3,7,8191); //降，圈数待测
         HAL_GPIO_WritePin(SOLENOID_VALVE_GPIO_Port, SOLENOID_VALVE_Pin, GPIO_PIN_RESET);
-        osDelay(SOLENOID_VALVE_TIME);
+				osDelay(delay_time_stike);
         HAL_GPIO_WritePin(SOLENOID_VALVE_GPIO_Port, SOLENOID_VALVE_Pin, GPIO_PIN_SET);
-        osDelay(TOTAL_WAIT_TIME-SOLENOID_VALVE_TIME);								//延时待测
+				osDelay(delay_time_close_claw);
         set_target(3,5,0); //合爪
     // }else{
     //     loading();
 //    }
+}
+void Dribble_test( int delay_time ){
+	if(DribblingStatus==0){
+		going_up();
+		if(motor_data_can3[6]->circle>CIRCLES_UP)
+			DribblingStatus=1;
+	}
+	if(DribblingStatus==1)
+	{
+		Stop();
+		DribblingStatus=2;
+	}
+	if(DribblingStatus==2)
+	{
+		osDelay(delay_time);
+		DribblingStatus=3;
+	}
+	if(DribblingStatus==3)
+	{
+		dribbling(SOLENOID_VALVE_TIME,TOTAL_WAIT_TIME-SOLENOID_VALVE_TIME);
+		DribblingStatus=4;
+	}
+	
 }
 
 void loading(void){

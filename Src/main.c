@@ -41,6 +41,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "sbus.h"
+#include "r1_shoot.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,6 +57,8 @@ extern motor_measure_t *motor_data_can3[8];
 
 extern IWDG_HandleTypeDef hiwdg1;
 extern int Vel_Deadband[3];
+extern double tor_output[3*8];
+extern shoot_t shoot_data;
 #define CUR      0
 #define VEL      1
 #define ANG      2
@@ -147,8 +150,12 @@ int main(void)
   MX_USART3_UART_Init();
   MX_FDCAN1_Init();
   MX_UART7_Init();
-  MX_IWDG1_Init();
+//  MX_IWDG1_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
+	HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_2);
+	
 	HAL_TIM_Base_Start_IT(&htim6);
 	HAL_UART_Receive_IT(&huart2, buffer+1, 1);
 	HAL_UART_Receive_IT(&huart7, buffer, 1);
@@ -160,7 +167,7 @@ int main(void)
 	PID_Speed_Para_Init(1, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 4, 10 , 3 , 0.01);
 
-	
+//	
 	PID_Speed_Para_Init(2, 1, 20 , 8 , 0.01);
 	PID_Speed_Para_Init(2, 2, 20 , 8 , 0.01);
 	PID_Speed_Para_Init(2, 3, 20 , 8 , 0.01);
@@ -179,7 +186,14 @@ int main(void)
 	
 	PID_Angle_S_Para_Init(1, 1 , 10 , 3 , 0.01);
   PID_Angle_A_Para_Init(1, 1 , 0.3 , 0 , 0);
-	rtP.TRANS_CH1_1=0.5;
+	
+	PID_Angle_S_Para_Init(1, 2 , 10 , 3 , 0.01);
+  PID_Angle_A_Para_Init(1, 2 , 0.3 , 0 , 0);
+	
+	PID_Angle_S_Para_Init(1, 3 , 10 , 3 , 0.01);
+  PID_Angle_A_Para_Init(1, 3 , 0.3 , 0 , 0);
+	
+
 	
 	PID_Angle_S_Para_Init(1, 5 , 4 , 0.5 , 0.1); 
   PID_Angle_A_Para_Init(1, 5 , 0.5 , 0.07 , 0.01); 
@@ -214,7 +228,7 @@ int main(void)
   PID_Angle_A_Para_Init(3, 7 , 0.3 , 0 , 0);
 	
 	Set_6020_Mode( 0 );
-	set_mode( VEL, VEL, VEL, VEL, ANG, ANG, ANG,
+	set_mode( VEL, VEL, ANG, VEL, ANG, ANG, ANG,
             VEL, VEL, VEL, VEL, ANG, ANG, ANG,
 					  ANG, VEL, VEL, VEL, ANG, ANG, ANG ); 
 //	dm_motor_init();
@@ -223,27 +237,28 @@ int main(void)
 //	dm_motor_enable(&hfdcan1,&motor[Motor3]);
 	memset(UART2_TX_BUF,0,sizeof(UART2_TX_BUF));
 	
-//	while(1){
-//		active_can[0]=motor_data_can2[4]->activate;
-//		if(active_can[0])
-//			break;
-//	}
+	while(1){
+		active_can[0]=motor_data_can2[4]->activate;
+		if(active_can[0])
+			break;
+	}
 
-//		rtU.target_CH2_5=m6020_2_1_init;
-//	while(1){
-//		active_can[1]=motor_data_can2[5]->activate;
-//		if(active_can[1])
-//			break;
-//	}
+		rtU.target_CH2_5=m6020_2_1_init;
+	while(1){
+		active_can[1]=motor_data_can2[5]->activate;
+		if(active_can[1])
+			break;
+	}
 
-//		rtU.target_CH2_6=m6020_2_2_init;
-//	while(1){
-//		active_can[2]=motor_data_can2[6]->activate;
-//		if(active_can[2])
-//			break;
-//	}
+		rtU.target_CH2_6=m6020_2_2_init;
+	while(1){
+		active_can[2]=motor_data_can2[6]->activate;
+		if(active_can[2])
+			break;
+	}
 
-//		rtU.target_CH2_7=m6020_2_3_init;
+		rtU.target_CH2_7=m6020_2_3_init;
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -453,9 +468,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   {		
 
     cnt[0]++;
-
 		HAL_IWDG_Refresh(&hiwdg1);//feed the IWG
-
+		
+//		reload();
+//		rtU.status_CH1_1=CUR;
+//		rtU.status_CH1_2=CUR;
+//		tor_output[CH1_1]=-shoot_data.output_stg;
+//		tor_output[CH1_2]=shoot_data.output_stg;
 		Reach_TGT();
 		get_msgn();
 		assign_output();

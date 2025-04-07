@@ -3,7 +3,7 @@
 #include "sbus.h"
 
 #define PI 3.1415926
-#define MAXVEL 4000
+#define MAXVEL 3000
 #define m6020_2_1_init 5848
 #define m6020_2_2_init 3021
 #define m6020_2_3_init	3055
@@ -64,9 +64,9 @@ void ctrlmotor(double Vx, double Vy, double omega,int brake) {
 		return;
 	}
 
-	Vx=5000/400*Vx;
-	Vy=5000/400*Vy;
-	omega=5000/400*omega;
+	Vx=MAXVEL*1.41/400*Vx;
+	Vy=MAXVEL*1.41/400*Vy;
+	omega=MAXVEL*1.41/400*omega;
   MotorSignal[0].thetan = atan2(Vy, Vx - omega) * 180 / PI;
   MotorSignal[1].thetan = atan2(Vy - omega * cos(30.0 * PI / 180.0), Vx + omega * sin(30.0 * PI / 180.0)) * 180 / PI;
   MotorSignal[2].thetan = atan2(Vy + omega * cos(30.0 * PI / 180.0), Vx + omega * sin(30.0 * PI / 180.0)) * 180 / PI;
