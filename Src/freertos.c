@@ -38,11 +38,13 @@
 #include "stdio.h"
 #include "string.h"
 #include "sbus.h"
+#include "R1_dribble.h"
+#include "gpio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+uint8_t key_sig[10]={1};
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -73,6 +75,13 @@ const osThreadAttr_t run_ball_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for shoot_ball */
+osThreadId_t shoot_ballHandle;
+const osThreadAttr_t shoot_ball_attributes = {
+  .name = "shoot_ball",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow1,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -81,6 +90,7 @@ const osThreadAttr_t run_ball_attributes = {
 
 void start_chassis_control(void *argument);
 void start_run_ball(void *argument);
+void start_shoot_ball(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -117,6 +127,9 @@ void MX_FREERTOS_Init(void) {
   /* creation of run_ball */
   run_ballHandle = osThreadNew(start_run_ball, NULL, &run_ball_attributes);
 
+  /* creation of shoot_ball */
+  shoot_ballHandle = osThreadNew(start_shoot_ball, NULL, &shoot_ball_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -141,7 +154,6 @@ void start_chassis_control(void *argument)
   for(;;)
   {
 		control_chassis();
-    osDelay(1);
   }
   /* USER CODE END start_chassis_control */
 }
@@ -156,12 +168,44 @@ void start_chassis_control(void *argument)
 void start_run_ball(void *argument)
 {
   /* USER CODE BEGIN start_run_ball */
+	TickType_t previous_wake_time = xTaskGetTickCount();
+	
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+		if(key_sig[0]){
+			going_up();
+			vTaskDelayUntil(&previous_wake_time,pdMS_TO_TICKS(1000));
+			dribbling();
+			key_sig[0]=0;
+		}
+	
   }
   /* USER CODE END start_run_ball */
+}
+
+/* USER CODE BEGIN Header_start_shoot_ball */
+/**
+* @brief Function implementing the shoot_ball thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_start_shoot_ball */
+void start_shoot_ball(void *argument)
+{
+  /* USER CODE BEGIN start_shoot_ball */
+	TickType_t previous_wake_time = xTaskGetTickCount();
+  /* Infinite loop */
+  for(;;)
+  {
+    if(key_sig[1]){
+
+			vTaskDelayUntil(&previous_wake_time,pdMS_TO_TICKS(1000));
+
+			key_sig[1]=0;
+		}
+  }
+  /* USER CODE END start_shoot_ball */
 }
 
 /* Private application code --------------------------------------------------*/

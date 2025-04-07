@@ -159,9 +159,7 @@ int main(void)
 	PID_Speed_Para_Init(1, 2, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 4, 10 , 3 , 0.01);
-	PID_Speed_Para_Init(1, 5, 10 , 3 , 0.01);
-	PID_Speed_Para_Init(1, 6, 10 , 3 , 0.01);
-	PID_Speed_Para_Init(1, 7, 10 , 3 , 0.01);
+
 	
 	PID_Speed_Para_Init(2, 1, 20 , 8 , 0.01);
 	PID_Speed_Para_Init(2, 2, 20 , 8 , 0.01);
@@ -176,17 +174,20 @@ int main(void)
 	PID_Speed_Para_Init(3, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(3, 4, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(3, 5, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(3, 6, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(3, 7, 10 , 3 , 0.01);
 	
 	PID_Angle_S_Para_Init(1, 1 , 10 , 3 , 0.01);
   PID_Angle_A_Para_Init(1, 1 , 0.3 , 0 , 0);
 	rtP.TRANS_CH1_1=0.5;
 	
-	PID_Angle_S_Para_Init(1, 5 , 4 , 0.5 , 0.1); //这个是夹爪的2006
+	PID_Angle_S_Para_Init(1, 5 , 4 , 0.5 , 0.1); 
   PID_Angle_A_Para_Init(1, 5 , 0.5 , 0.07 , 0.01); 
-  PID_Angle_S_Para_Init(1, 6 , 4 , 0.5 , 0.1);//升降�?3508
+  PID_Angle_S_Para_Init(1, 6 , 4 , 0.5 , 0.1);
   PID_Angle_A_Para_Init(1, 6 , 0.5 , 0.07 , 0.01);
-  PID_Angle_S_Para_Init(1, 7 , 4 , 0.5 , 0.1);//上弹的时候转的那�?3508
-  PID_Angle_A_Para_Init(1, 7 , 0.5 , 0.07 , 0.01);
+	
+  PID_Angle_S_Para_Init(1, 7 , 10 , 3 , 0.01);
+  PID_Angle_A_Para_Init(1, 7 , 0.3 , 0 , 0);
 	
 	PID_Angle_S_Para_Init(2, 1 , 10 , 3 , 0.01);
   PID_Angle_A_Para_Init(2, 1 , 0.3 , 0 , 0);
@@ -204,37 +205,45 @@ int main(void)
 	PID_Angle_S_Para_Init(3, 1 , 10 , 3 , 0.01);
   PID_Angle_A_Para_Init(3, 1 , 0.3 , 0 , 0);
 	
+	PID_Angle_S_Para_Init(3, 5 , 4 , 0.5 , 0.1); //这个是夹爪的2006
+  PID_Angle_A_Para_Init(3, 5 , 0.5 , 0.07 , 0.01); 
+  PID_Angle_S_Para_Init(3, 6 , 4 , 0.5 , 0.1);//升降�?3508
+  PID_Angle_A_Para_Init(3, 6 , 0.5 , 0.07 , 0.01);
+												
+  PID_Angle_S_Para_Init(3, 7 , 10 , 3 , 0.01);//上弹的时候转的那�?3508
+  PID_Angle_A_Para_Init(3, 7 , 0.3 , 0 , 0);
+	
 	Set_6020_Mode( 0 );
 	set_mode( VEL, VEL, VEL, VEL, ANG, ANG, ANG,
             VEL, VEL, VEL, VEL, ANG, ANG, ANG,
 					  ANG, VEL, VEL, VEL, ANG, ANG, ANG ); 
-	dm_motor_init();
-	dm_motor_enable(&hfdcan1,&motor[Motor1]);
-	dm_motor_enable(&hfdcan1,&motor[Motor2]);
-	dm_motor_enable(&hfdcan1,&motor[Motor3]);
+//	dm_motor_init();
+//	dm_motor_enable(&hfdcan1,&motor[Motor1]);
+//	dm_motor_enable(&hfdcan1,&motor[Motor2]);
+//	dm_motor_enable(&hfdcan1,&motor[Motor3]);
 	memset(UART2_TX_BUF,0,sizeof(UART2_TX_BUF));
 	
-	while(1){
-		active_can[0]=motor_data_can2[4]->activate;
-		if(active_can[0])
-			break;
-	}
+//	while(1){
+//		active_can[0]=motor_data_can2[4]->activate;
+//		if(active_can[0])
+//			break;
+//	}
 
-		rtU.target_CH2_5=m6020_2_1_init;
-	while(1){
-		active_can[1]=motor_data_can2[5]->activate;
-		if(active_can[1])
-			break;
-	}
+//		rtU.target_CH2_5=m6020_2_1_init;
+//	while(1){
+//		active_can[1]=motor_data_can2[5]->activate;
+//		if(active_can[1])
+//			break;
+//	}
 
-		rtU.target_CH2_6=m6020_2_2_init;
-	while(1){
-		active_can[2]=motor_data_can2[6]->activate;
-		if(active_can[2])
-			break;
-	}
+//		rtU.target_CH2_6=m6020_2_2_init;
+//	while(1){
+//		active_can[2]=motor_data_can2[6]->activate;
+//		if(active_can[2])
+//			break;
+//	}
 
-		rtU.target_CH2_7=m6020_2_3_init;
+//		rtU.target_CH2_7=m6020_2_3_init;
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -253,9 +262,6 @@ int main(void)
   while (1)
   {
 
-//		vehicle_test.Vy=rtU.speed_rpm_CH2_1;
-//		vehicle_test.omega=rtU.speed_rpm_CH2_2;
-//		vehicle_test.Park=rtU.speed_rpm_CH2_3;
 //		if(RC.action==1)
 //		{ 
 //			int buff_len;
@@ -448,11 +454,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
     cnt[0]++;
 
-		HAL_IWDG_Refresh(&hiwdg1);//喂狗
+		HAL_IWDG_Refresh(&hiwdg1);//feed the IWG
 
-		dm_motor_ctrl_send(&hfdcan1,&motor[Motor1]);
-		dm_motor_ctrl_send(&hfdcan1,&motor[Motor2]);
-		dm_motor_ctrl_send(&hfdcan1,&motor[Motor3]);
 		Reach_TGT();
 		get_msgn();
 		assign_output();

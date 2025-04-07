@@ -65,8 +65,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define SOLENOID_VALVE_Pin GPIO_PIN_0
-#define SOLENOID_VALVE_GPIO_Port GPIOE
+#define SOLENOID_VALVE_Pin GPIO_PIN_7
+#define SOLENOID_VALVE_GPIO_Port GPIOC
 
 /* USER CODE BEGIN Private defines */
 

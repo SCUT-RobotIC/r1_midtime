@@ -61,3 +61,6 @@ pid_dji\freertos.o: ../USER/dm_motor_ctrl.h
 pid_dji\freertos.o: ../USER/UPPER_LOCATION.h
 pid_dji\freertos.o: D:\keil\ARM\ARMCC\Bin\..\include\string.h
 pid_dji\freertos.o: ../USER/sbus.h
+pid_dji\freertos.o: ../USER/R1_dribble.h
+pid_dji\freertos.o: ../Inc/tim.h
+pid_dji\freertos.o: ../Inc/gpio.h
