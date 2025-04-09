@@ -63,6 +63,17 @@ typedef struct
 	double Park;
 } vehicle_state;
 
+typedef struct{
+	double Vx;
+	double Vy;
+	double omega;
+	double ax;
+	double ay;
+	double a_omega;
+	
+} chassis_accer_control;
+
+
 void get_msgn(void);
 void assign_output(void);
 void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, int mode_CH1_5, int mode_CH1_6, int mode_CH1_7,
@@ -71,6 +82,7 @@ void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, in
 void set_reset_status(void);
 void cala_d(int i);
 void ctrlmotor(double Vx, double Vy, double omega,int brake) ;
+void ctrl_chassis_accer_zone(double Vx, double Vy, double omega,int brake) ;
 void set_target(uint8_t channel,uint8_t id,int target);
 void PID_Speed_Para_Init(int channel, int motor, double kp, double ki, double kd);
 void PID_Angle_S_Para_Init(int channel, int motor, double kp, double ki, double kd);

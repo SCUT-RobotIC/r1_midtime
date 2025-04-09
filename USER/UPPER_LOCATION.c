@@ -158,7 +158,7 @@ void control_chassis(){
 			{
 				vehicle_test.Vx		=	SBUS_CH.CH1-1002;
 				vehicle_test.Vy		=	SBUS_CH.CH2-1002;
-				vehicle_test.omega=SBUS_CH.CH4-1002;
+				vehicle_test.omega=-SBUS_CH.CH4+1002;
 				Vel_Deadband[0]=40;
 				Vel_Deadband[1]=40;
 				Vel_Deadband[2]=40;
@@ -182,6 +182,6 @@ void control_chassis(){
 			vehicle_test.Park=(SBUS_CH.CH6>800);
 		}
 		
-		ctrlmotor(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
+		ctrl_chassis_accer_zone(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
 }
 

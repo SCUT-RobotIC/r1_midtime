@@ -140,11 +140,15 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+	TickType_t xLastWakeTime;
+  const TickType_t xDelay1ms = pdMS_TO_TICKS( 1 );
+  xLastWakeTime = xTaskGetTickCount();
+
   /* Infinite loop */
   for(;;)
   {
 		control_chassis();
-    osDelay(1);
+    vTaskDelayUntil(&xLastWakeTime,xDelay1ms);
   }
   /* USER CODE END StartDefaultTask */
 }

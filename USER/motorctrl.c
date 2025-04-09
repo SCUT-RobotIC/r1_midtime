@@ -18,6 +18,10 @@ extern motor_measure_t *motor_data_can2[8];
 extern motor_measure_t *motor_data_can3[8];
 extern int Vel_Deadband[3];
 extern uint8_t mode_6020;
+
+
+
+chassis_accer_control chassis_accer;
 double tor_output[3*8] = {0};
 int BrakeAng[4] = {0};
 double mult = 1;
@@ -27,14 +31,89 @@ enum {
 Dead_Vx,Dead_Vy,Dead_Omega
 };
 
+void ctrl_chassis_accer_zone(double Vx, double Vy, double omega,int brake) {
+	if(fabs(Vx)<Vel_Deadband[Dead_Vx])
+		Vx=0;
+	if(fabs(Vy)<Vel_Deadband[Dead_Vy])
+		Vy=0;
+	if(fabs(omega)<Vel_Deadband[Dead_Omega])
+		omega=0;
+	
+	
+	
+	if(chassis_accer.Vx/8000>0.3)
+	{
+		chassis_accer.ax=20;
+	}
+	else
+	{
+		chassis_accer.ax=5;
+	}
+	
+	if(chassis_accer.Vy/8000>0.3)
+	{
+		chassis_accer.ay=20;
+	}
+	else
+	{
+		chassis_accer.ay=5;
+	}
+	
+		if(chassis_accer.omega/8000>0.3)
+	{
+		chassis_accer.a_omega=20;
+	}
+	else
+	{
+		chassis_accer.a_omega=5;
+	}
+	Vx=MAXVEL*1.41/600*Vx;
+	Vy=MAXVEL*1.41/600*Vy;
+	omega=MAXVEL*1.41/600*omega;
+	
+	double err_vx=Vx-chassis_accer.Vx;
+	if(err_vx>0)
+		chassis_accer.Vx+=chassis_accer.ax;
+	else if (err_vx<0)
+		chassis_accer.Vx-=chassis_accer.ax;
+
+
+	double err_vy=Vy-chassis_accer.Vy;
+	if(err_vy>0)
+		chassis_accer.Vy+=chassis_accer.ay;
+	else if (err_vy<0)
+		chassis_accer.Vy-=chassis_accer.ay;
+	
+	double err_v_omega=omega-chassis_accer.omega;
+	if(err_v_omega>0)
+		chassis_accer.omega+=chassis_accer.a_omega;
+	else if (err_v_omega<0)
+		chassis_accer.omega-=chassis_accer.a_omega;
+	
+	
+	if(chassis_accer.Vx>MAXVEL)
+		chassis_accer.Vx=MAXVEL;
+	if(chassis_accer.Vx<-MAXVEL)
+		chassis_accer.Vx=-MAXVEL;
+	
+	if(chassis_accer.Vy>MAXVEL)
+		chassis_accer.Vy=MAXVEL;
+	if(chassis_accer.Vy<-MAXVEL)
+		chassis_accer.Vy=-MAXVEL;
+	
+	if(chassis_accer.omega>MAXVEL)
+		chassis_accer.omega=MAXVEL;
+	if(chassis_accer.omega<-MAXVEL)
+		chassis_accer.omega=-MAXVEL;
+	
+	
+	ctrlmotor(chassis_accer.Vx,chassis_accer.Vy,chassis_accer.omega,brake);
+}
+
+
 void ctrlmotor(double Vx, double Vy, double omega,int brake) {
 	
-		if(fabs(Vx)<Vel_Deadband[Dead_Vx])
-			Vx=0;
-		if(fabs(Vy)<Vel_Deadband[Dead_Vy])
-			Vy=0;
-		if(fabs(omega)<Vel_Deadband[Dead_Omega])
-			omega=0;
+
 	
 	if(brake==1)
 	{
@@ -64,9 +143,7 @@ void ctrlmotor(double Vx, double Vy, double omega,int brake) {
 		return;
 	}
 
-	Vx=MAXVEL*1.41/400*Vx;
-	Vy=MAXVEL*1.41/400*Vy;
-	omega=MAXVEL*1.41/400*omega;
+
   MotorSignal[0].thetan = atan2(Vy, Vx - omega) * 180 / PI;
   MotorSignal[1].thetan = atan2(Vy - omega * cos(30.0 * PI / 180.0), Vx + omega * sin(30.0 * PI / 180.0)) * 180 / PI;
   MotorSignal[2].thetan = atan2(Vy + omega * cos(30.0 * PI / 180.0), Vx + omega * sin(30.0 * PI / 180.0)) * 180 / PI;
